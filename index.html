@@ -22,6 +22,9 @@
             let googleSheetData;
 
             function parseGoogleSheetURL() {
+
+                document.getElementById('loading-overlay').style.display = 'inline-block';
+
                 let googleSheetURLUnparsed = document.getElementById(GOOGLE_SHEET_URL_ELEMENT_ID).value;
 
                 $.ajax({
@@ -31,15 +34,21 @@
                     crossDomain: true,
                     beforeSend: function(xhr) {
                         xhr.withCredentials = true;
-                    }, success: function(data, textStatus, request) {
-                        console.log('success');
+                        console.log('DEBUG: SENDING REQUEST');
+                    }, success: function(data, status, request) {
+                        googleSheetData = data;
+                        console.log('DEBUG: GOT RESPONSE');
+                    }, error: function(request, status, error) {
+                        console.log('DEBUG: REQUEST FAILED');
                     }
                 })
+
+                document.getElementById('loading-overlay').style.display = 'none';
             }
         </script>
     </head>
     <body>
-        <div class = 'container-fluid mx-0'>
+        <div class = 'container-fluid mx-0' id = 'main-div'>
             <div class = 'row col-lg-12 mx-0'>
                 <div class = 'd-flex col-lg-12 vh-100 justify-content-center big-divs'>
                     <div class = 'col-lg-12 form-horizontal my-auto'>
@@ -69,6 +78,13 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class = 'loading-overlay' id = 'loading-overlay'>
+            <div class = 'container-fluid mx-0 col-lg-12 vh-100 d-flex align-items-center'>
+                <h1 class = 'text-center col-lg-12'>
+                    Downloading the spreadsheet...
+                </h1>
             </div>
         </div>
     </body>
