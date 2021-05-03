@@ -15,6 +15,28 @@
         <script src = './utils/jquery-3.3.1.min.js'></script>
         <script src = './utils/popper-1.14.3.min.js'></script>
         <script src = './utils/bootstrap-4.1.3.min.js'></script>
+
+        <script>
+            const GOOGLE_SHEET_URL_ELEMENT_ID = 'google-sheet-url';
+
+            let googleSheetData;
+
+            function parseGoogleSheetURL() {
+                let googleSheetURLUnparsed = document.getElementById(GOOGLE_SHEET_URL_ELEMENT_ID).value;
+
+                $.ajax({
+                    headers: {'Accept':'text/csv'},
+                    type: 'GET',
+                    url: 'https://docs.google.com/spreadsheets/d/' + String(googleSheetURLUnparsed) + '/export?format=csv',
+                    crossDomain: true,
+                    beforeSend: function(xhr) {
+                        xhr.withCredentials = true;
+                    }, success: function(data, textStatus, request) {
+                        console.log('success');
+                    }
+                })
+            }
+        </script>
     </head>
     <body>
         <div class = 'container-fluid mx-0'>
@@ -35,10 +57,15 @@
                             <span class = 'text-nowrap my-auto px-1'>
                                 <p class = 'my-auto'>Google Sheet URL</p>
                             </span>
-                            <input type = 'text' id = 'google-drive-url' class = 'form-control my-auto flex-grow-1'/>
+                            <input type = 'text' id = 'google-sheet-url' class = 'form-control my-auto flex-grow-1' placeholder = 'Document ID (looks like aBcDefGHiJKlmnOPQrStUVwxYZ)'/>
+                        </div>
+                        <div class = 'd-flex form-group col-lg-6 col-md-12 mx-auto'>
+                            <h6 class = 'mx-auto center-text'>
+                                Please make sure that the Google Sheets URL you are using leads to a <b>public</b> Google Sheet.
+                            </h6>
                         </div>
                         <div class = 'd-flex form-group col-lg-6 col-12-md mx-auto'>
-                            <button class = 'btn btn-primary mx-auto'>Verify Settings and Generate Cards Link</button>
+                            <button class = 'btn btn-primary mx-auto' onclick = 'parseGoogleSheetURL();'>Verify Settings and Generate Cards Link</button>
                         </div>
                     </div>
                 </div>
