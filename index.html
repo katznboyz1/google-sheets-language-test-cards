@@ -8,6 +8,7 @@
         <meta content = '#59fa4d' data-react-helpet = 'true' name = 'theme-color'/>
 
         <link rel = 'stylesheet' href = './utils/bootstrap-4.1.3.min.css'/>
+        <link rel = 'stylesheet' href = './utils/index.html.css'/>
 
         <title>Google Sheets Test Card Generator</title>
 
@@ -16,5 +17,30 @@
         <script src = './utils/bootstrap-4.1.3.min.js'></script>
     </head>
     <body>
+        <div class = 'container-fluid mx-0'>
+            <div class = 'row col-lg-12 mx-0'>
+                <div class = 'd-flex col-lg-12 vh-100 justify-content-center big-divs'>
+                    <div class = 'col-lg-12 form-horizontal my-auto'>
+                        <div class = 'd-flex form-group col-lg-6 col-md-12 mx-auto'>
+                            <h1 class = 'mx-auto'>
+                                Google Sheets Test Card Generator
+                            </h1>
+                        </div>
+                        <div class = 'd-flex form-group col-lg-6 col-md-12 mx-auto header-margin-1'>
+                            <h6 class = 'mx-auto'>
+                                written by <a href = 'https://github.com/katznboyz1'>katznboyz</a>
+                            </h6>
+                        </div>
+                        <div class = 'd-flex justify-content-between form-group col-lg-6 col-md-12 mx-auto'>
+                            <p class = 'col-lg-3 my-auto'>Google Sheet URL:</p>
+                            <input type = 'text' id = 'google-drive-url' class = 'form-control my-auto'/>
+                        </div>
+                        <div class = 'd-flex form-group col-lg-6 col-12-md mx-auto'>
+                            <button class = 'btn btn-primary mx-auto'>Verify Settings and Generate Cards Link</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
 </html>
