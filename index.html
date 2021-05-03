@@ -40,6 +40,7 @@
                         console.log('DEBUG: GOT RESPONSE');
                     }, error: function(request, status, error) {
                         console.log('DEBUG: REQUEST FAILED');
+                        alert('Failed to download the Google Sheet. Please make sure that the ID you are using leads to a public Google Sheet.');
                     }
                 })
 
@@ -59,7 +60,7 @@
                         </div>
                         <div class = 'd-flex form-group col-lg-6 col-md-12 mx-auto header-margin-1'>
                             <h6 class = 'mx-auto center-text'>
-                                written by <a href = 'https://github.com/katznboyz1'>katznboyz</a>
+                                written by <a href = 'https://github.com/katznboyz1' class = 'link-blue'>katznboyz</a>
                             </h6>
                         </div>
                         <div class = 'd-flex justify-content-between form-group col-lg-6 col-md-12 mx-auto'>
@@ -70,8 +71,21 @@
                         </div>
                         <div class = 'd-flex form-group col-lg-6 col-md-12 mx-auto'>
                             <h6 class = 'mx-auto center-text'>
-                                Please make sure that the Google Sheets URL you are using leads to a <b>public</b> Google Sheet.
+                                Please make sure that the Google Sheets URL you are using leads to a <b>public</b> Google Sheet. <span class = 'link-blue' data-toggle = 'collapse' href = '#collapsable-instruction-menu' role = 'button' aria-expanded = 'false' aria-controls = 'collapsable-instruction-menu'>(instructions)</span>
                             </h6>
+                        </div>
+                        <div class = 'd-flex form-group col-lg-6 col-md-12 mx-auto'>
+                            <div class = 'collapse border border-secondary mx-auto col-lg-12' id = 'collapsable-instruction-menu'>
+                                <p>Instructions for finding the Google Sheet ID (desktop):</p>
+                                <ol>
+                                    <li>Go to your Google Sheets document.</li>
+                                    <li>Go to the top right corner and click <i>"Share"</i>.</li>
+                                    <li>Make sure that <i>"Anyone on the internet with this link can view"</i> is selected, or else this website won't be able to access your sheet.</li>
+                                    <li>Copy the link. You should have a link similar to <i>"https://docs.google.com/spreadsheets/d/aBcDefGHiJKlmnOPQrStUVwxYZ/edit?usp=sharing"</i>.</li>
+                                    <li>Copy <b>only</b> the part of the link that has all the mixed case letters and numbers, then paste it into the searchbar on this website.</li>
+                                    <li>Clicking the generate cards link should work now!</li>
+                                </ol>
+                            </div>
                         </div>
                         <div class = 'd-flex form-group col-lg-6 col-12-md mx-auto'>
                             <button class = 'btn btn-primary mx-auto' onclick = 'parseGoogleSheetURL();'>Verify Settings and Generate Cards Link</button>
