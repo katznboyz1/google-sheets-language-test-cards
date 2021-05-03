@@ -6,3 +6,4 @@ body{background-color:white;}
 .loading-overlay{display:none;position:absolute;top:0px;left:0px;width:100vw;height:100vh;background-color:rgba(255, 255, 255, .95)}
 .link-blue{color:#165fa8;cursor:grab;}
 #collapsable-instruction-menu{border-radius:15px !important;}
+.margin-top-a-little-bit{margin-top:50px !important;}

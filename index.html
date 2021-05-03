@@ -15,16 +15,24 @@
         <script src = './utils/jquery-3.3.1.min.js'></script>
         <script src = './utils/popper-1.14.3.min.js'></script>
         <script src = './utils/bootstrap-4.1.3.min.js'></script>
+        <script src = './utils/papaparse.min.js'></script>
 
         <script>
             const GOOGLE_SHEET_URL_ELEMENT_ID = 'google-sheet-url';
 
             let googleSheetData;
 
+            function toggleLoadingScreen(status) {
+                if (status) {
+                    setTimeout(function() {document.getElementById('loading-overlay').style.display = 'inline-block';}, 200);
+                } else {
+                    setTimeout(function() {document.getElementById('loading-overlay').style.display = 'none';}, 200);
+                }
+            }
+
             function parseGoogleSheetURL() {
 
-                document.getElementById('loading-overlay').style.display = 'inline-block';
-
+                // timeout so that the loading screen doesnt flash too fast
                 let googleSheetURLUnparsed = document.getElementById(GOOGLE_SHEET_URL_ELEMENT_ID).value;
 
                 $.ajax({
@@ -35,16 +43,25 @@
                     beforeSend: function(xhr) {
                         xhr.withCredentials = true;
                         console.log('DEBUG: SENDING REQUEST');
+                        toggleLoadingScreen(true);
+
                     }, success: function(data, status, request) {
-                        googleSheetData = data;
                         console.log('DEBUG: GOT RESPONSE');
+                        googleSheetData = Papa.parse(data);
+                        if (googleSheetData['errors'].length > 0) {
+                            console.log('DEBUG: RESPONSE IS INVALID')
+                            alert('Error parsing the spreadsheet.');
+                        } else {
+                            console.log('DEBUG: RESPONSE IS VALID');
+                        }
+                        toggleLoadingScreen(false);
+
                     }, error: function(request, status, error) {
                         console.log('DEBUG: REQUEST FAILED');
                         alert('Failed to download the Google Sheet. Please make sure that the ID you are using leads to a public Google Sheet.');
+                        toggleLoadingScreen(false);
                     }
                 })
-
-                document.getElementById('loading-overlay').style.display = 'none';
             }
         </script>
     </head>
@@ -65,7 +82,7 @@
                         </div>
                         <div class = 'd-flex justify-content-between form-group col-lg-6 col-md-12 mx-auto'>
                             <span class = 'text-nowrap my-auto px-1'>
-                                <p class = 'my-auto'>Google Sheet URL</p>
+                                <p class = 'my-auto'>Google Sheet URL:</p>
                             </span>
                             <input type = 'text' id = 'google-sheet-url' class = 'form-control my-auto flex-grow-1' placeholder = 'Document ID (looks like aBcDefGHiJKlmnOPQrStUVwxYZ)'/>
                         </div>
@@ -89,6 +106,15 @@
                         </div>
                         <div class = 'd-flex form-group col-lg-6 col-12-md mx-auto'>
                             <button class = 'btn btn-primary mx-auto' onclick = 'parseGoogleSheetURL();'>Verify Settings and Generate Cards Link</button>
+                        </div>
+                        <div class = 'd-flex justify-content-between form-group col-lg-2 col-md-4 mx-auto margin-top-a-little-bit'>
+                            <span class = 'text-nowrap my-auto px-1'>
+                                <p class = 'my-auto'><b>"Translate from"</b> row:</p>
+                            </span>
+                            <select class = 'btn btn-outline-dark'>
+                                <option>1</option>
+                                <option>2</option>
+                            </select>
                         </div>
                     </div>
                 </div>
