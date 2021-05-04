@@ -22,12 +22,44 @@
 
             let googleSheetData;
 
+            let tagsToReplace = { // from https://stackoverflow.com/a/5499821
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;'
+            };
+
+            function replaceTag(tag) { // from https://stackoverflow.com/a/5499821
+                return tagsToReplace[tag] || tag;
+            }
+
+            function safeTagsReplace(str) {
+                return str.replace(/[&<>]/g, replaceTag); // from https://stackoverflow.com/a/5499821
+            }
+
             function toggleLoadingScreen(status) {
                 if (status) {
                     setTimeout(function() {document.getElementById('loading-overlay').style.display = 'inline-block';}, 200);
                 } else {
                     setTimeout(function() {document.getElementById('loading-overlay').style.display = 'none';}, 200);
                 }
+            }
+
+            function changeScreens() {
+                let translateFromSelect = document.getElementById('select-translate-from-row');
+                let translateToSelect = document.getElementById('select-translate-to-row');
+
+                for (i = 0; i < googleSheetData['data'][0].length; i++) {
+                    let newElement = document.createElement('option');
+                    newElement.innerHTML = safeTagsReplace(googleSheetData['data'][0][i]);
+                    newElement.value = String(i);
+                    newElementClone = newElement.cloneNode(true);
+                    translateFromSelect.appendChild(newElement);
+                    translateToSelect.appendChild(newElementClone);
+                }
+                
+                document.getElementById('form-1').style.display = 'none';
+                document.getElementById('form-2').style.display = 'block';
+                toggleLoadingScreen(false);
             }
 
             function parseGoogleSheetURL() {
@@ -54,7 +86,7 @@
                         } else {
                             console.log('DEBUG: RESPONSE IS VALID');
                         }
-                        toggleLoadingScreen(false);
+                        changeScreens();
 
                     }, error: function(request, status, error) {
                         console.log('DEBUG: REQUEST FAILED');
@@ -62,6 +94,10 @@
                         toggleLoadingScreen(false);
                     }
                 })
+            }
+
+            function generateTestURL() {
+                
             }
         </script>
     </head>
@@ -80,41 +116,58 @@
                                 written by <a href = 'https://github.com/katznboyz1' class = 'link-blue'>katznboyz</a>
                             </h6>
                         </div>
-                        <div class = 'd-flex justify-content-between form-group col-lg-6 col-md-12 mx-auto'>
-                            <span class = 'text-nowrap my-auto px-1'>
-                                <p class = 'my-auto'>Google Sheet URL:</p>
-                            </span>
-                            <input type = 'text' id = 'google-sheet-url' class = 'form-control my-auto flex-grow-1' placeholder = 'Document ID (looks like aBcDefGHiJKlmnOPQrStUVwxYZ)'/>
-                        </div>
-                        <div class = 'd-flex form-group col-lg-6 col-md-12 mx-auto'>
-                            <h6 class = 'mx-auto center-text'>
-                                Please make sure that the Google Sheets URL you are using leads to a <b>public</b> Google Sheet. <span class = 'link-blue' data-toggle = 'collapse' href = '#collapsable-instruction-menu' role = 'button' aria-expanded = 'false' aria-controls = 'collapsable-instruction-menu'>(instructions)</span>
-                            </h6>
-                        </div>
-                        <div class = 'd-flex form-group col-lg-6 col-md-12 mx-auto'>
-                            <div class = 'collapse border border-secondary mx-auto col-lg-12' id = 'collapsable-instruction-menu'>
-                                <p>Instructions for finding the Google Sheet ID (desktop):</p>
-                                <ol>
-                                    <li>Go to your Google Sheets document.</li>
-                                    <li>Go to the top right corner and click <i>"Share"</i>.</li>
-                                    <li>Make sure that <i>"Anyone on the internet with this link can view"</i> is selected, or else this website won't be able to access your sheet.</li>
-                                    <li>Copy the link. You should have a link similar to <i>"https://docs.google.com/spreadsheets/d/aBcDefGHiJKlmnOPQrStUVwxYZ/edit?usp=sharing"</i>.</li>
-                                    <li>Copy <b>only</b> the part of the link that has all the mixed case letters and numbers, then paste it into the searchbar on this website.</li>
-                                    <li>Clicking the generate cards link should work now!</li>
-                                </ol>
+                        <div id = 'form-1'>
+                            <div class = 'd-flex justify-content-between form-group col-lg-6 col-md-12 mx-auto'>
+                                <span class = 'text-nowrap my-auto px-1'>
+                                    <p class = 'my-auto'>Google Sheet URL:</p>
+                                </span>
+                                <input type = 'text' id = 'google-sheet-url' class = 'form-control my-auto flex-grow-1' placeholder = 'Document ID (looks like aBcDefGHiJKlmnOPQrStUVwxYZ)'/>
+                            </div>
+                            <div class = 'd-flex form-group col-lg-6 col-md-12 mx-auto'>
+                                <h6 class = 'mx-auto center-text'>
+                                    Please make sure that the Google Sheets URL you are using leads to a <b>public</b> Google Sheet. <span class = 'link-blue' data-toggle = 'collapse' href = '#collapsable-instruction-menu' role = 'button' aria-expanded = 'false' aria-controls = 'collapsable-instruction-menu'>(instructions)</span>
+                                </h6>
+                            </div>
+                            <div class = 'd-flex form-group col-lg-6 col-md-12 mx-auto'>
+                                <div class = 'collapse border border-secondary mx-auto col-lg-12' id = 'collapsable-instruction-menu'>
+                                    <p>Instructions for finding the Google Sheet ID (desktop):</p>
+                                    <ol>
+                                        <li>Go to your Google Sheets document.</li>
+                                        <li>Go to the top right corner and click <i>"Share"</i>.</li>
+                                        <li>Make sure that <i>"Anyone on the internet with this link can view"</i> is selected, or else this website won't be able to access your sheet.</li>
+                                        <li>Copy the link. You should have a link similar to <i>"https://docs.google.com/spreadsheets/d/aBcDefGHiJKlmnOPQrStUVwxYZ/edit?usp=sharing"</i>.</li>
+                                        <li>Copy <b>only</b> the part of the link that has all the mixed case letters and numbers, then paste it into the searchbar on this website.</li>
+                                        <li>Clicking the generate cards link should work now!</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <div class = 'd-flex form-group col-lg-6 col-12-md mx-auto'>
+                                <button class = 'btn btn-primary mx-auto' onclick = 'parseGoogleSheetURL();'>Verify Settings and Generate Cards Link</button>
                             </div>
                         </div>
-                        <div class = 'd-flex form-group col-lg-6 col-12-md mx-auto'>
-                            <button class = 'btn btn-primary mx-auto' onclick = 'parseGoogleSheetURL();'>Verify Settings and Generate Cards Link</button>
-                        </div>
-                        <div class = 'd-flex justify-content-between form-group col-lg-2 col-md-4 mx-auto margin-top-a-little-bit'>
-                            <span class = 'text-nowrap my-auto px-1'>
-                                <p class = 'my-auto'><b>"Translate from"</b> row:</p>
-                            </span>
-                            <select class = 'btn btn-outline-dark'>
-                                <option>1</option>
-                                <option>2</option>
-                            </select>
+                        <div id = 'form-2'>
+                            <div class = 'd-flex form-group col-lg-6 col-md-12 mx-auto'>
+                                <h6 class = 'mx-auto center-text'>
+                                    Successfully downloaded the spreadsheet, please fill out the rest of this information so that the spreadsheet can be converted into cards.
+                                </h6>
+                            </div>
+                            <div class = 'd-flex justify-content-between form-group col-lg-4 col-md-6 mx-auto'>
+                                <span class = 'text-nowrap my-auto px-1'>
+                                    <p class = 'my-auto mx-2'>What does the <b>"translate from"</b> row start with?</p>
+                                </span>
+                                <select class = 'btn btn-outline-dark form-control my-auto flex-grow-1' id = 'select-translate-from-row'>
+                                </select>
+                            </div>
+                            <div class = 'd-flex justify-content-between form-group col-lg-4 col-md-6 mx-auto'>
+                                <span class = 'text-nowrap my-auto px-1'>
+                                    <p class = 'my-auto mx-2'>What does the <b>"translate to"</b> row start with?</p>
+                                </span>
+                                <select class = 'btn btn-outline-dark form-control my-auto flex-grow-1' id = 'select-translate-to-row'>
+                                </select>
+                            </div>
+                            <div class = 'd-flex form-group col-lg-6 col-12-md mx-auto'>
+                                <button class = 'btn btn-primary mx-auto' onclick = 'generateTestURL();'>Generate Testing Cards URL</button>
+                            </div>
                         </div>
                     </div>
                 </div>
