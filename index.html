@@ -99,7 +99,24 @@
             }
 
             function generateTestURL() {
-
+                let translateFromSelectValue = document.getElementById('select-translate-from-row').value;
+                let translateToSelectValue = document.getElementById('select-translate-to-row').value;
+                let googleSheetID = document.getElementById(GOOGLE_SHEET_URL_ELEMENT_ID).value;
+                let maxNumberOfCardsPerSession = document.getElementById('max-number-of-cards-per-session').value;
+                if (isNaN(maxNumberOfCardsPerSession)) {
+                    alert('Please enter a number for the "maximum amount of cards per session" field.');
+                } else {
+                    maxNumberOfCardsPerSession = parseInt(maxNumberOfCardsPerSession);
+                    // t = to, f = from, id = id, m = max
+                    let url = window.location.origin + '/test?f=' + String(translateFromSelectValue) + '&t=' + String(translateToSelectValue) + '&m=' + String(maxNumberOfCardsPerSession) + '&id=' + String(googleSheetID);
+                    let encodedURL = encodeURI(url);
+                    console.log(encodedURL);
+                    document.getElementById('form-2').style.display = 'none';
+                    document.getElementById('form-3').style.display = 'block';
+                    let cardsURLElement = document.getElementById('cards-url');
+                    cardsURLElement.innerHTML = encodedURL;
+                    cardsURLElement.href = encodedURL;
+                }
             }
         </script>
     </head>
@@ -175,6 +192,23 @@
                             </div>
                             <div class = 'd-flex form-group col-lg-6 col-12-md mx-auto'>
                                 <button class = 'btn btn-primary mx-auto' onclick = 'generateTestURL();'>Generate Testing Cards URL</button>
+                            </div>
+                        </div>
+                        <div id = 'form-3'>
+                            <div class = 'd-flex form-group col-lg-6 col-md-12 mx-auto'>
+                                <h4 class = 'mx-auto center-text'>
+                                    Your custom cards can be used at this URL:<br>
+                                </h4>
+                            </div>
+                            <div class = 'd-flex form-group col-lg-6 col-md-12 mx-auto'>
+                                <h1 class = 'mx-auto center-text'>
+                                    <a href = '' class = 'link-blue' id = 'cards-url'>TMP URL</a>
+                                </h1>
+                            </div>
+                            <div class = 'd-flex form-group col-lg-6 col-md-12 mx-auto'>
+                                <h9 class = 'mx-auto center-text'>
+                                    Please save this URL so that you can use this exam configuration again!
+                                </h9>
                             </div>
                         </div>
                     </div>
