@@ -56,6 +56,8 @@
                     translateFromSelect.appendChild(newElement);
                     translateToSelect.appendChild(newElementClone);
                 }
+
+                document.getElementById('generator-dynamic-text-1').innerHTML = 'Successfully downloaded the spreadsheet, please fill out the rest of this information so that the spreadsheet can be converted into cards. (' + String(googleSheetData['data'].length) + ' rows, ' + String(googleSheetData['data'][0].length) + ' cols)';
                 
                 document.getElementById('form-1').style.display = 'none';
                 document.getElementById('form-2').style.display = 'block';
@@ -97,7 +99,7 @@
             }
 
             function generateTestURL() {
-                
+
             }
         </script>
     </head>
@@ -147,8 +149,8 @@
                         </div>
                         <div id = 'form-2'>
                             <div class = 'd-flex form-group col-lg-6 col-md-12 mx-auto'>
-                                <h6 class = 'mx-auto center-text'>
-                                    Successfully downloaded the spreadsheet, please fill out the rest of this information so that the spreadsheet can be converted into cards.
+                                <h6 class = 'mx-auto center-text' id = 'generator-dynamic-text-1'>
+                                    TMP TEXT
                                 </h6>
                             </div>
                             <div class = 'd-flex justify-content-between form-group col-lg-4 col-md-6 mx-auto'>
@@ -164,6 +166,12 @@
                                 </span>
                                 <select class = 'btn btn-outline-dark form-control my-auto flex-grow-1' id = 'select-translate-to-row'>
                                 </select>
+                            </div>
+                            <div class = 'd-flex justify-content-between form-group col-lg-6 col-md-12 mx-auto'>
+                                <span class = 'text-nowrap my-auto px-1'>
+                                    <p class = 'my-auto'>Max number of cards per session:</p>
+                                </span>
+                                <input type = 'number' id = 'max-number-of-cards-per-session' class = 'form-control my-auto flex-grow-1' placeholder = '30'/>
                             </div>
                             <div class = 'd-flex form-group col-lg-6 col-12-md mx-auto'>
                                 <button class = 'btn btn-primary mx-auto' onclick = 'generateTestURL();'>Generate Testing Cards URL</button>
